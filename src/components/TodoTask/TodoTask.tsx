@@ -1,20 +1,21 @@
-
+import { Tasks } from '../../Interfaces';
 import './styles.css'
 
 interface TaskProps{
-    task: 
+    task: Tasks,
+    handleDeleteTask(DeleteTaskById: number): void
 }
 
-function TodoTask( { task }) {
+function TodoTask( { task, handleDeleteTask } : TaskProps) {
 	
 	return (
 		<div className="card">
 			<div>
-                <p>Fazer lição</p>
+                <p>{task.name}</p>
             </div>
 
             <div className="line2" >
-            <span className="btn-card">X</span>
+            <span className="btn-card" onClick={() => handleDeleteTask(task.id)}>X</span>
             </div>
 		</div>
 	);

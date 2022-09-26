@@ -1,6 +1,9 @@
 import { useState } from "react";
 import TodoTask from "./components/TodoTask/TodoTask";
+import { ToastContainer, toast } from 'react-toastify';
 
+
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/styles.css'
 
 interface TaskProps{
@@ -15,19 +18,37 @@ function App() {
 	const [todoList, setTodoList] = useState<TaskProps[]>([])
 
 	function handleAddTask(){
-		const idRandom = (num: number) => Math.floor(Math.random() * num)
+		if(!task){
+			toast.error("Digite alguma task")
+		}
+		else{
+			const idRandom = (num: number) => Math.floor(Math.random() * num)
 
-		const newTask = { id: idRandom(9419219412942194), name: task }
-		
-		setTodoList([...todoList, newTask])
+			const newTask = { id: idRandom(9419219412942194), name: task }
+			
+			setTodoList([...todoList, newTask])
+			toast.success("Task cadastrada com sucesso!")
+			setTask("")
+		}
+	}
+
+	function handleDeleteTask(DeleteTaskById: number){
+		setTodoList(todoList.filter((task) => task.id !== DeleteTaskById))
+
+		toast.warning("Task deletada com sucesso!")
 	}
 
 	return (
 		<div className="App">
 
+			<ToastContainer 
+				autoClose={3000}
+				pauseOnHover={false}
+			/>
+
 			<header>
 
-				<h2>Lists</h2>
+				<h2>TODO List</h2>
 
 				<input
 					type="text" autoComplete="off" 
@@ -43,9 +64,11 @@ function App() {
 			
 			<div className="line"></div>
 			
-			{todoList.map(task => (
+			{todoList.map((task, key) => (
 				<TodoTask 
-					task={task} 
+					task={task}
+					key={key} 
+					handleDeleteTask={handleDeleteTask}
 				/>
 			))}
 
